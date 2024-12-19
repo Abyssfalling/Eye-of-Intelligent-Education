@@ -1,0 +1,223 @@
+| 序号 | 表名                        | 数据量        | 说明                                             |
+| ---- | --------------------------- | ------------- | ------------------------------------------------ |
+| 1    | course_chapter              | 不少于310000  | 课程章节表，包含课程ID和章节内容等信息           |
+| 2    | course_task                 | 不少于250000  | 课程任务表，包含课程ID和课程任务等信息           |
+| 3    | classroom_member            | 不少于110000  | 班级成员表，包含班级ID和用户ID等信息             |
+| 4    | classroom_courses           | 不少于9000    | 班级课程表，包含班级ID和课程ID等信息             |
+| 5    | log                         | 不少于1000000 | 日志表，包括日志操作人ID和登录日志等信息         |
+| 6    | user_learn_statistics_total | 不少于140000  | 用户学习统计表，包含用户ID和学习相关统计等信息   |
+| 7    | activity_learn_log          | 不少于1000000 | 学习日志表，包括用户ID和学习日志等信息           |
+| 8    | testpaper                   | 不少于12000   | 试卷信息表，包括试卷名称和创建试卷等信息         |
+| 9    | testpaper_result            | 不少于340000  | 试卷结果表，包括试卷名称、用户ID和试卷分数等信息 |
+
+ 
+
+具体表的字段如下：
+
+1. 课程章节表-course_chapter
+
+| 序号 | 字段                | 类型         | 含义                                                |
+| ---- | ------------------- | ------------ | --------------------------------------------------- |
+| 1    | id                  | int unsigned | 课程章节ID                                          |
+| 2    | courseId            | int unsigned | 章节所属课程ID                                      |
+| 3    | type                | varchar(255) | 章节类型：chapter为章节，unit为单元，lesson为课时。 |
+| 4    | number              | int unsigned | 章节编号                                            |
+| 5    | seq                 | int unsigned | 章节序号                                            |
+| 6    | title               | varchar(255) | 章节名称                                            |
+| 7    | createdTime         | int unsigned | 章节创建时间                                        |
+| 8    | updatedTime         | int unsigned | 修改时间（默认值为0）                               |
+| 9    | copyId              | int          | 复制章节的ID（默认值为0）                           |
+| 10   | status              | varchar(20)  | 发布状态                                            |
+| 11   | isOptional          | tinyint(1)   | 是否选修（默认为0，即非选修）                       |
+| 12   | migrateLessonId     | int          | 迁移课时ID（默认值为0）                             |
+| 13   | migrateCopyCourseId | int          | 迁移复制课程ID（默认值为0）                         |
+| 14   | migrateRefTaskId    | int          | 迁移参考任务ID（默认值为0）                         |
+| 15   | mgrateCopyTaskId    | int          | 迁移复制任务ID（默认值为0）                         |
+| 16   | migrate_task_id     | int          | 来源任务表ID（不允许为0）                           |
+| 17   | published_number    | int unsigned | 已发布的章节编号（默认值为0）                       |
+
+ 
+
+2. 课程任务表-course_task
+
+| 序号 | 字段            | 类型         | 含义                                            |
+| ---- | --------------- | ------------ | ----------------------------------------------- |
+| 1    | id              | int unsigned | 主键                                            |
+| 2    | courseId        | int unsigned | 所属课程的ID（默认值为0）                       |
+| 3    | fromCourseSetId | int unsigned | 某个课程集合中引用的ID（默认值为0）             |
+| 4    | seq             | int unsigned | 序号（默认值为1）                               |
+| 5    | categoryId      | int          | 类别ID，允许为空（默认值为NULL）                |
+| 6    | activityId      | int unsigned | 引用的教学活动ID（默认值为0）                   |
+| 7    | title           | varchar(255) | 标题                                            |
+| 8    | isFree          | int unsigned | 是否免费（默认值为0）                           |
+| 9    | isOptional      | int unsigned | 是否必修（默认值为0）                           |
+| 10   | startTime       | int unsigned | 开始时间（默认值为0）                           |
+| 11   | endTime         | int unsigned | 结束时间（默认值为0）                           |
+| 12   | status          | varchar(255) | 发布状态（默认值为’create’）                    |
+| 13   | createdUserId   | int unsigned | 创建者ID                                        |
+| 14   | createdTime     | int unsigned | 创建时间（默认值为0）                           |
+| 15   | updatedTime     | int unsigned | 最后更新时间（默认值为0）                       |
+| 16   | mode            | varchar(60)  | 任务模式，允许为空                              |
+| 17   | isLesson        | tinyint(1)   | 是否为固定课时（默认值为0）                     |
+| 18   | number          | varchar(32)  | 任务编号（默认值为空字符串）                    |
+| 19   | type            | varchar(50)  | 任务类型                                        |
+| 20   | mediaSource     | varchar(32)  | 媒体文件来源（默认值为空字符串）                |
+| 21   | length          | int unsigned | 时长或页数，由具体的活动业务来定义（默认值为0） |
+| 22   | maxOnlineNum    | int unsigned | 任务最大可同时进行的人数，0为不限制             |
+| 23   | copyId          | int          | 复制来源task的ID（默认值为0）                   |
+| 24   | migrateLessonId | int          | 迁移的课时ID（默认值为0）                       |
+
+ 
+
+3. 班级成员表-classroom_member
+
+| 序号 | 字段             | 类型             | 含义                        |
+| ---- | ---------------- | ---------------- | --------------------------- |
+| 1    | id               | int unsigned     | 主键，自动递增              |
+| 2    | classroomId      | int unsigned     | 班级ID（默认值为0）         |
+| 3    | userId           | int unsigned     | 用户ID（默认值为0）         |
+| 4    | orderId          | int unsigned     | 订单ID（默认值为0）         |
+| 5    | levelId          | int unsigned     | 等级（默认值为0）           |
+| 6    | noteNum          | int unsigned     | 笔记数（默认值为0）         |
+| 7    | threadNum        | int unsigned     | 话题数（默认值为0）         |
+| 8    | locked           | tinyint unsigned | 学员是否被锁定（默认值为0） |
+| 9    | role             | varchar(255)     | 角色（默认值为’auditor’）   |
+| 10   | createdTime      | int unsigned     | 创建时间（默认值为0）       |
+| 11   | lastLearnTime    | int              | 最后学习时间（允许为空）    |
+| 12   | learnedNum       | int              | 已学课时数（允许为空）      |
+| 13   | updatedTime      | int              | 最后更新时间（默认值为0）   |
+| 14   | deadline         | int unsigned     | 到期时间（默认值为0）       |
+| 15   | refundDeadline   | int              | 退款截止日期（默认值为0）   |
+| 16   | deadlineNotified | int              | 有效期通知（默认值为0）     |
+
+ 
+
+4. 班级课程表-classroom_courses
+
+| 序号 | 字段           | 类型             | 含义                      |
+| ---- | -------------- | ---------------- | ------------------------- |
+| 1    | id             | int unsigned     | 主键，自动递增            |
+| 2    | classroomId    | int unsigned     | 班级ID                    |
+| 3    | courseId       | int unsigned     | 课程ID                    |
+| 4    | parentCourseId | int unsigned     | 父课程ID                  |
+| 5    | seq            | int unsigned     | 班级课程顺序（默认值为0） |
+| 6    | disabled       | tinyint unsigned | 是否禁用（默认值为0）     |
+| 7    | courseSetId    | int              | 课程集合ID（默认值为0）   |
+
+ 
+
+5. 日志表-log
+
+| 序号 | 字段            | 类型         | 含义                                                         |
+| ---- | --------------- | ------------ | ------------------------------------------------------------ |
+| 1    | id              | int unsigned | 系统日志ID，主键，自动递增                                   |
+| 2    | userId          | int unsigned | 用户ID（默认值为0）                                          |
+| 3    | module          | varchar(32)  | 日志所属模块                                                 |
+| 4    | action          | varchar(50)  | 日志所属操作类型                                             |
+| 5    | data            | text         | 日志数据                                                     |
+| 6    | browser         | varchar(120) | 操作人浏览器信息（允许为空）                                 |
+| 7    | operatingSystem | varchar(120) | 操作人操作系统（允许为空）                                   |
+| 8    | device          | varchar(120) | 操作人移动端或者计算机，移动端为’mobile’，计算机为’computer’（允许为空） |
+| 9    | createdTime     | int unsigned | 日志发生时间（默认值为0）                                    |
+| 10   | level           | varchar(10)  | 日志等级                                                     |
+
+ 
+
+6. 用户学习统计表-user_learn_statistics_total
+
+| 序号 | 字段               | 类型         | 含义                              |
+| ---- | ------------------ | ------------ | --------------------------------- |
+| 1    | id                 | int unsigned | 主键，自动递增                    |
+| 2    | userId             | int unsigned | 用户ID                            |
+| 3    | joinedClassroomNum | int unsigned | 加入的班级数，唯一键（默认值为0） |
+| 4    | joinedCourseSetNum | int unsigned | 加入的非班级课程数（默认值为0）   |
+| 5    | joinedCourseNum    | int unsigned | 加入的非班级计划数（默认值为0）   |
+| 6    | exitClassroomNum   | int unsigned | 退出的班级数（默认值为0）         |
+| 7    | exitCourseSetNum   | int unsigned | 退出的非班级课程数（默认值为0）   |
+| 8    | exitCourseNum      | int unsigned | 退出的非班级计划数（默认值为0）   |
+| 9    | learnedSeconds     | int unsigned | 学习时长（默认值为0）             |
+| 10   | finishedTaskNum    | int unsigned | 学完的任务数量（默认值为0）       |
+| 11   | createdTime        | int unsigned | 创建时间（默认值为0）             |
+| 12   | updatedTime        | int unsigned | 更新时间（默认值为0）             |
+
+ 
+
+7. 学习日志表-activity_learn_log
+
+| 序号 | 字段         | 类型        | 含义                                                         |
+| ---- | ------------ | ----------- | ------------------------------------------------------------ |
+| 1    | id           | int         | 主键，自动递增                                               |
+| 2    | activityId   | int         | 教学活动ID（默认值为0）                                      |
+| 3    | courseTaskId | int         | 教学活动ID（默认值为0）                                      |
+| 4    | userId       | int         | 用户ID（默认值为0）                                          |
+| 5    | mediaType    | varchar(32) | 活动类型（默认值为0）                                        |
+| 6    | event        | varchar(32) | 事件类型，start表示开始学习，doing表示开始学习；watching表示开始观看视频；finish表示结束学习（默认值为0） |
+| 7    | data         | text        | 学习行为数据，  watchTime表示本次观看视频的时长；  learnedTime表示本次学习的时长  lastTime表示上次createdTime，即本次开始记录的时间戳 |
+| 8    | learnedTime  | int         | 用时时长（默认值为0）                                        |
+| 9    | createdTime  | int         | 创建时间（默认值为0）                                        |
+
+ 
+
+8. 试卷信息表-testpaper
+
+| 序号 | 字段            | 类型                 | 含义                                           |
+| ---- | --------------- | -------------------- | ---------------------------------------------- |
+| 1    | id              | int unsigned         | 主键，自动递增                                 |
+| 2    | name            | varchar(255)         | 试卷名称                                       |
+| 3    | courseId        | int                  | 课程ID                                         |
+| 4    | lessonId        | int                  | 课时ID                                         |
+| 5    | limitedTime     | int unsigned         | 限时(单位：秒)（默认值为0）                    |
+| 6    | pattern         | varchar(255)         | 试卷生成/显示模式（默认值为0）                 |
+| 7    | target          | varchar(255)         |                                                |
+| 8    | status          | varchar(32)          | 试卷状态：draft,open,closed（默认值为’draft’） |
+| 9    | score           | float(10,1) unsigned | 总分（默认值为0.0）                            |
+| 10   | passedCondition | text                 | 通过条件                                       |
+| 11   | itemCount       | int unsigned         | 题目数量（默认值为0）                          |
+| 12   | questionTypeSeq | varchar(64)          | 题型排序                                       |
+| 13   | createdTime     | int unsigned         | 创建时间（默认值为0）                          |
+| 14   | updatedTime     | int unsigned         | 修改时间（默认值为0）                          |
+| 15   | metas           | text                 | 题型排序                                       |
+| 16   | type            | varchar(32)          | 测验类型（默认值为0）                          |
+| 17   | courseSetId     | int unsigned         | 课程集合ID（默认值为0）                        |
+
+ 
+
+9. 试卷结果表-testpaper_result
+
+| 序号 | 字段            | 类型                                                | 含义                                              |
+| ---- | --------------- | --------------------------------------------------- | ------------------------------------------------- |
+| 1    | id              | int unsigned                                        | 主键，自动递增                                    |
+| 2    | paperName       | varchar(255)                                        | 试卷名称                                          |
+| 3    | testId          | int unsigned                                        | 测试ID（默认值为0）                               |
+| 4    | userId          | int unsigned                                        | 用户ID（默认值为0）                               |
+| 5    | courseId        | int                                                 | 课程ID（默认值为0）                               |
+| 6    | lessonId        | int                                                 | 课时ID（默认值为0）                               |
+| 7    | score           | float(10,1)                                         | 试卷总分（默认值为0.0）                           |
+| 8    | objectiveScore  | float(10,1)                                         | 客观分数（默认值为0.0）                           |
+| 9    | subjectiveScore | float(10,1)                                         | 主观分数（默认值为0.0）                           |
+| 10   | teacherSay      | text                                                | 老师评语                                          |
+| 11   | rightItemCount  | int unsigned                                        | 正确计数（默认值为0）                             |
+| 12   | passedStatus    | enum('none','excellent','good','passed','unpassed') | 考试通过状态,none表示该考试没有（默认值为’none’） |
+| 13   | limitedTime     | int unsigned                                        | 试卷限制时间(秒)（默认值为0）                     |
+| 14   | beginTime       | int unsigned                                        | 开始时间（默认值为0）                             |
+| 15   | endTime         | int unsigned                                        | 结束时间（默认值为0）                             |
+| 16   | updateTime      | int unsigned                                        | 更新时间（默认值为0）                             |
+| 17   | metas           | text                                                | 练习的题型排序等附属信息                          |
+| 18   | status          | enum('doing','paused','reviewing','finished')       | 状态                                              |
+| 19   | checkTeacherId  | int unsigned                                        | 教师评阅ID，0表示系统自动评阅（默认值为0）        |
+| 20   | checkedTime     | int                                                 | 评阅时间（默认值为0）                             |
+| 21   | usedTime        | int unsigned                                        | 学生考试用时（默认值为0）                         |
+| 22   | type            | varchar(32)                                         | 测验类型（默认值为’testpaper’）                   |
+| 23   | courseSetId     | int unsigned                                        | 课程集合ID（默认值为0）                           |
+
+ 
+
+10. 课程视频
+
+| 序号 | 章节名称（title） | 含义                            |
+| ---- | ----------------- | ------------------------------- |
+| 1    | 1.1认识Python     | 1.1认识Python章节对应的视频文件 |
+| ……   | ……                | ……                              |
+| 29   | 8.3结语           | 8.3结语章节对应的视频文件       |
+
+ 
